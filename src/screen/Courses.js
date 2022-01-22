@@ -81,7 +81,7 @@ const Courses = () => {
         <div className="row align-items-center" style={{ rowGap: 20 }}>
           {Array.from(Array(6).keys()).map((x) => {
             return (
-              <div className="col-md-3" key={x}>
+              <div className="col-md-3 row justify-content-center" key={x}>
                 <div className="card" style={{ width: "18rem" }}>
                   <img src="images/code.jfif" className="card-img-top" alt="..." />
                   <div className="card-body" style={{ padding: "20px" }}>

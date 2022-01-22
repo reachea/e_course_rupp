@@ -85,8 +85,8 @@ section.my-course {
   background-color: white;
   margin-top: -20px;
   padding-top: 60px;
-  padding-left: 200px;
-  padding-right: 200px;
+  padding-left: 100px;
+  padding-right: 100px;
 }
 
 select.form-select {
