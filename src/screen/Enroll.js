@@ -5,6 +5,7 @@ import { EnrollContainer } from "./Enroll.styled";
 const Enroll = () => {
   const [ isActive, setIsActive ] = useState("");
   const [ selectedVideo, setSelectedVideo ] = useState("../video/video-1.mp4");
+  const [ selectedTab, setSelectedTab ] = useState('1');
   const { isLogged } = useAuthContext();
 
   useEffect(() => {
@@ -63,24 +64,30 @@ const Enroll = () => {
         <div
           className="p-3  bd-highlight tablinks"
           // onclick="openTab(event, 'Overview') "
+          onClick={() => setSelectedTab("1")}
+          style={{ cursor: "pointer" }}
         >
           Overview
         </div>
         <div
           className="p-3 bd-highlight tablinks"
           // onclick="openTab(event, 'Offine-Package')"
+          onClick={() => setSelectedTab("2")}
+          style={{ cursor: "pointer" }}
         >
           Offine Package
         </div>
         <div
           className="p-3 bd-highlight tablinks"
           // onclick="openTab(event, 'Exercise-Files') "
+          onClick={() => setSelectedTab("3")}
+          style={{ cursor: "pointer" }}
         >
           Exercise Files
         </div>
       </div>
 
-      <div id="Overview" className="tabcontent container ">
+      <div id="Overview" className={`${selectedTab === '1'? '' : 'tab-none'} tabcontent container`}>
         <div className="row">
           <div className="col " align="center">
             <h3>Instructor</h3>
@@ -223,7 +230,7 @@ const Enroll = () => {
         </div>
       </div>
 
-      <div id="Offine-Package" className="tab-none tabcontent container ">
+      <div id="Offine-Package" className={`${selectedTab === '2'? '' : 'tab-none'} tabcontent container`}>>
         <div className="d-flex justify-content-center">
           <div className="m-5 p-5  col-6" align="center">
             <a href="#" style={{ color: "coral" }}>
@@ -239,7 +246,7 @@ const Enroll = () => {
         </div>
       </div>
 
-      <div id="Exercise-Files" className="tab-none tabcontent container ">
+      <div id="Exercise-Files" className={`${selectedTab === '3'? '' : 'tab-none'} tabcontent container`}>>
         <div className="d-flex justify-content-center">
           <div className="m-5 p-5  col-6" align="center">
             <a href="#" style={{ color: "coral" }}>
