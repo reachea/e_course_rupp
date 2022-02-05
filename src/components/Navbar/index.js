@@ -3,11 +3,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Link } from "react-router-dom";
 import { NavbarContainer } from "./Navbar.styled";
-
+import { useQuery } from "@apollo/client";
 import NavbarLogo from "../../assets/buildskill_logo.png";
+import { gql } from "@apollo/client";
+import { useAuthContext } from "../../context/AuthContext";
+import { Button } from "react-bootstrap";
 
+const ME = gql`
+  query me {
+    me {
+      roles_permission {
+        name
+      }
+    }
+  }
+`;
 
 const Navbar = () => {
+  const { token, setToken } = useAuthContext();
+  const { data } = useQuery(ME);
+
   return (
     <NavbarContainer>
       <div className="header navbar-inverse fixed-top">
@@ -28,12 +43,37 @@ const Navbar = () => {
               <li>
                 <Link to="/about-us"> About us</Link>
               </li>
+              <li
+                style={{
+                  display: data?.me?.roles_permission[0]?.name === "Teacher" ? "" : "none",
+                }}
+              >
+                <Link to="/upload-course"> Upload Course</Link>
+              </li>
             </ul>
           </div>
           <div className="col-3 botton-header">
             <form>
-              <button className="btnsign_in_out"><Link to="/login" style={{ color: "#212121" }}>Sign in</Link></button>
-              <button className="btnsign_in_out">Sign out</button>
+              {token ? undefined : (
+                <Button
+                  onClick={() => window.location.replace('/login')}
+                  className="btnsign_in_out"
+                  style={{ color: "#212121" }}
+                >
+                  Sign in
+                </Button>
+              )}
+              {token ? (
+                <button
+                  className="btnsign_in_out"
+                  onClick={() => {
+                    window.localStorage.removeItem("token");
+                    window.location.replace("/");
+                  }}
+                >
+                  Sign out
+                </button>
+              ) : undefined}
             </form>
           </div>
         </div>
@@ -60,7 +100,11 @@ const Navbar = () => {
             </ul>
           </div>
           <div className="col-2 icon-pd">
-            <FontAwesomeIcon icon={faSignInAlt} className="signin " style={{ padding: "0px" }}></FontAwesomeIcon>
+            <FontAwesomeIcon
+              icon={faSignInAlt}
+              className="signin"
+              style={{ padding: "0px" }}
+            ></FontAwesomeIcon>
           </div>
         </div>
       </div>
@@ -68,10 +112,7 @@ const Navbar = () => {
         <div className="row">
           <div className="col-4 icon-menu-ph">
             <div id="mySidenav" className="sidenav">
-              <a
-                className="closebtn"
-                onClick={() => {}}
-              >
+              <a className="closebtn" onClick={() => {}}>
                 &times;
               </a>
               <a href="#">Home</a>
@@ -79,7 +120,10 @@ const Navbar = () => {
               <a href="#">Contact</a>
               <a href="#aboutus">About us</a>
             </div>
-            <span style={{ fontSize:"30px", cursor: "pointer" }} onClick={() => {}}>
+            <span
+              style={{ fontSize: "30px", cursor: "pointer" }}
+              onClick={() => {}}
+            >
               <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
             </span>
             <span></span>
@@ -88,7 +132,11 @@ const Navbar = () => {
             <img src={NavbarLogo} />
           </div>
           <div className="col-4 icon-ph">
-            <FontAwesomeIcon icon={faSignInAlt} className="signin" style={{ padding: "0px" }}></FontAwesomeIcon>
+            <FontAwesomeIcon
+              icon={faSignInAlt}
+              className="signin"
+              style={{ padding: "0px" }}
+            ></FontAwesomeIcon>
           </div>
         </div>
       </div>

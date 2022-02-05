@@ -2,6 +2,12 @@ import styled from "styled-components";
 
 export const LoginContainer = styled.div`
   margin-top: 80px;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: #FFFFFF;
+  z-index: 99999;
+
 
   .form-header {
     background-color: #5a47ab;

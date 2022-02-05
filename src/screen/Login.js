@@ -7,34 +7,50 @@ import { Card, Form } from "react-bootstrap";
 import { LoginContainer } from "./Login.styled.js";
 import { useAuthContext } from "../context/AuthContext.js";
 import { useNavigate } from "react-router-dom";
+import { gql, useMutation } from "@apollo/client";
+
+const SIGNIN = gql`
+  mutation signin($input: SignInInput!) {
+    signIn(input: $input)
+  }
+`
 
 const Login = () => {
-  const { setIsLogged, isLogged } = useAuthContext();
+  const { setToken, token } = useAuthContext();
   const navigate = useNavigate();
 
   let email;
   let password;
 
+  const [signIn, { loading }] = useMutation(SIGNIN, {
+    onCompleted: (data) => {
+      if (data) {
+        window.localStorage.setItem("token", data.signIn)
+        setToken(data.signIn)
+      }
+    },
+    onError: (e) => {
+      toastr.error("username or password is incorrect!")
+    }
+  })
+
   useEffect(() => {
-    if (isLogged) {
+    if (token) {
       navigate("/");
     }
-  }, [isLogged])
+  }, [token])
 
   const onHandleSubmit = (e) => {
     e.preventDefault();
 
-    if (email.value !== 'admin') {
-      toastr.error("Username does not exist!")
-      return
-    }
-
-    if (password.value !== 'admin') {
-      toastr.error("Password is not correct!")
-      return
-    }
-
-    setIsLogged(!isLogged)
+    signIn({
+      variables: {
+        input: {
+          username: email.value,
+          password: password.value
+        }
+      }
+    })
   };
 
   return (
@@ -115,7 +131,7 @@ const Login = () => {
                     </div>
 
                     <div className="d-flex align-items-center justify-contents-center flex-column mt-3">
-                      <button className="btn form-submit-btn" type="submit">
+                      <button className="btn form-submit-btn" type="submit" disabled={loading? true : ""}>
                         Sign In
                       </button>
                     </div>

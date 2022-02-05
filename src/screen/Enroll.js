@@ -6,15 +6,15 @@ const Enroll = () => {
   const [ isActive, setIsActive ] = useState("");
   const [ selectedVideo, setSelectedVideo ] = useState("../video/video-1.mp4");
   const [ selectedTab, setSelectedTab ] = useState('1');
-  const { isLogged } = useAuthContext();
+  const { token } = useAuthContext();
 
   useEffect(() => {
-    if (!isLogged) {
+    if (!token) {
       window.location.replace('/login') 
     }
 
     return () => {}
-  }, [isLogged])
+  }, [token])
 
   const onHandleSelect = (val) => {
     if (val === isActive) {
@@ -230,7 +230,7 @@ const Enroll = () => {
         </div>
       </div>
 
-      <div id="Offine-Package" className={`${selectedTab === '2'? '' : 'tab-none'} tabcontent container`}>>
+      <div id="Offine-Package" className={`${selectedTab === '2'? '' : 'tab-none'} tabcontent container`}>
         <div className="d-flex justify-content-center">
           <div className="m-5 p-5  col-6" align="center">
             <a href="#" style={{ color: "coral" }}>
@@ -246,7 +246,7 @@ const Enroll = () => {
         </div>
       </div>
 
-      <div id="Exercise-Files" className={`${selectedTab === '3'? '' : 'tab-none'} tabcontent container`}>>
+      <div id="Exercise-Files" className={`${selectedTab === '3'? '' : 'tab-none'} tabcontent container`}>
         <div className="d-flex justify-content-center">
           <div className="m-5 p-5  col-6" align="center">
             <a href="#" style={{ color: "coral" }}>

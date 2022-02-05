@@ -1,22 +1,24 @@
 import React, { useContext, useState } from "react";
 
 const AuthContext = React.createContext({
-  isLogged: false,
-  setIsLogged: () => {}
+  token: "",
+  setToken: () => {}
 })
 
 export const AuthContextProvider = (props) => {
-  const [isLogged, setIsLogged] = useState(false); 
+  const [token, setToken] = useState(
+    window ? window.localStorage.getItem('token') || "" : ""
+  ); 
 
   return (
-    <AuthContext.Provider value={{isLogged, setIsLogged}}>
+    <AuthContext.Provider value={{token, setToken}}>
       {props.children}
     </AuthContext.Provider>
   )
 }
 
 export const useAuthContext = () => {
-  const { isLogged, setIsLogged } = useContext(AuthContext)
+  const { token, setToken } = useContext(AuthContext)
 
-  return {isLogged, setIsLogged}
+  return {token, setToken}
 }

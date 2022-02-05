@@ -3,8 +3,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Link } from "react-router-dom";
 import { CoursesContainer } from "./Courses.styled.js";
+import { gql, useQuery } from "@apollo/client";
+
+const QUERY = gql`
+  query courseList {
+    me {
+      username
+    }
+
+    courseList {
+      id
+      name
+      author
+    }
+  }
+`;
 
 const Courses = () => {
+  const { data, loading } = useQuery(QUERY);
+
+  if (!data || loading) return <></>;
+
   return (
     <CoursesContainer>
       <section style={{ marginTop: "80px", backgroundColor: "#5947AB" }}>
@@ -83,16 +102,28 @@ const Courses = () => {
             return (
               <div className="col-md-3 row justify-content-center" key={x}>
                 <div className="card" style={{ width: "18rem" }}>
-                  <img src="images/code.jfif" className="card-img-top" alt="..." />
+                  <img
+                    src="images/code.jfif"
+                    className="card-img-top"
+                    alt="..."
+                  />
                   <div className="card-body" style={{ padding: "20px" }}>
                     <div className="list">
                       <ul>
                         <li>Bilgisayar Bilimleri</li>
                         <li>
-                          <FontAwesomeIcon icon={faEye} style={{ color: "#5a47ab" }} ></FontAwesomeIcon> 1225
+                          <FontAwesomeIcon
+                            icon={faEye}
+                            style={{ color: "#5a47ab" }}
+                          ></FontAwesomeIcon>{" "}
+                          1225
                         </li>
                         <li>
-                          <FontAwesomeIcon icon={faStar} style={{ color: "#5a47ab" }} ></FontAwesomeIcon> 3.9
+                          <FontAwesomeIcon
+                            icon={faStar}
+                            style={{ color: "#5a47ab" }}
+                          ></FontAwesomeIcon>{" "}
+                          3.9
                         </li>
                       </ul>
                     </div>
@@ -105,13 +136,67 @@ const Courses = () => {
                         <del>55$</del>
                       </sup>
                     </h5>
-                    <Link to="/courses/enroll" className="btn btn-primary" style={{ padding: "5px 10px" }}>
+                    <Link
+                      to="/courses/enroll"
+                      className="btn btn-primary"
+                      style={{ padding: "5px 10px" }}
+                    >
                       Enroll
                     </Link>
                   </div>
                 </div>
               </div>
             );
+          })}
+          {data?.courseList?.map((x) => {
+            if (x.author === data?.me?.username) {
+              return (
+                <div className="col-md-3 row justify-content-center" key={x}>
+                  <div className="card" style={{ width: "18rem" }}>
+                    <img
+                      src="images/code.jfif"
+                      className="card-img-top"
+                      alt="..."
+                    />
+                    <div className="card-body" style={{ padding: "20px" }}>
+                      <div className="list">
+                        <ul>
+                          <li>{x?.author}</li>
+                          <li>
+                            <FontAwesomeIcon
+                              icon={faEye}
+                              style={{ color: "#5a47ab" }}
+                            ></FontAwesomeIcon>{" "}
+                            1225
+                          </li>
+                          <li>
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              style={{ color: "#5a47ab" }}
+                            ></FontAwesomeIcon>{" "}
+                            3.9
+                          </li>
+                        </ul>
+                      </div>
+                      <h5 className="card-title">{x?.name}</h5>
+                      <h5 className="card-text">
+                        15${" "}
+                        <sup>
+                          <del>55$</del>
+                        </sup>
+                      </h5>
+                      <Link
+                        to="/courses/enroll"
+                        className="btn btn-primary"
+                        style={{ padding: "5px 10px" }}
+                      >
+                        Enroll
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
           })}
         </div>
         <div className="pagination mb-5">

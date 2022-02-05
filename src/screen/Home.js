@@ -2,11 +2,22 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 import { HomeContainer } from "./Home.styled";
+import { gql, useQuery } from "@apollo/client";
+
+const QUERY = gql`
+  query courseList {
+    courseList {
+      id
+      name
+      author
+    }
+  }
+`;
 
 const Home = () => {
-  const { isLogged } = useAuthContext();
+  const {data, loading} = useQuery(QUERY)
 
-  console.log(isLogged)
+  if (!data || loading) return <></>
 
   return (
     <HomeContainer>
@@ -194,6 +205,55 @@ const Home = () => {
                   </div>
                 );
               })}
+
+              {
+                data?.courseList?.map((x) => {
+                  return (
+                    <div
+                    className="col-md-3 d-flex justify-content-center align-items-center"
+                    key={x.id}
+                  >
+                    <div className="card" style={{ width: "18rem" }}>
+                      <img
+                        src="images/course1.jpg"
+                        className="card-img-top"
+                        alt="..."
+                      />
+                      <div className="promotion">
+                        <p>-40%</p>
+                      </div>
+                      <div className="card-body">
+                        <div className="card-title">
+                          <p>{x.author}</p>
+                          <span className="user">
+                            <i className="far fa-user"> 1225</i>
+                          </span>
+                          <span className="rating">
+                            <i className="fas fa-star"> 3.9</i>
+                          </span>
+                        </div>
+
+                        <p className="card-text">
+                          {x.title}
+                        </p>
+                        <div className="cardfooter">
+                          <p>
+                            15${" "}
+                            <sup>
+                              {" "}
+                              <strike>55$</strike>{" "}
+                            </sup>{" "}
+                          </p>
+                          <Link to="/courses/enroll" className="btn btn-primary">
+                            enroll
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  )
+                })
+              }
           </div>
         </div>
       </div>
