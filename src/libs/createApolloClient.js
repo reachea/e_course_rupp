@@ -4,7 +4,7 @@ import {
 } from "@apollo/client";
 
 const createApolloClient = (token) => {
-  const uri = 'http://e-course-rupp-graph.production.reachea.me/?token=' + token;
+  const uri = 'https://api-graph.reachea.me/?token=' + token;
 
   const client = new ApolloClient({
     uri: uri,
